@@ -16,7 +16,11 @@ lazy val foo = crossProject.in(file(".")).
      libraryDependencies += "com.lihaoyi" %%% "scalatags" % "0.6.0"
   ).
   jvmSettings(
-    libraryDependencies += "com.typesafe.akka" %% "akka-http-experimental" % "2.4.10"
+    libraryDependencies ++= Seq(
+      "com.typesafe.akka" %% "akka-http-experimental" % "2.4.10",
+      "org.webjars" % "webjars-locator" % "0.32",
+      "org.webjars.bower" % "material-design-lite" % "1.2.1"
+    )
   ).
   jsSettings(
     // Add JS-specific settings here
