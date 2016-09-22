@@ -9,12 +9,19 @@ import scalatags.Text.all._
 object View {
 
   private val `material-lite.js` = "assets/1.2.1/material.min.js"
+  private val frontendApp = "app/codereview.js"
 
   val index = html(
     all.head(
-      script(src := `material-lite.js`, `type` := "text/javascript")
+      script(src := `material-lite.js`, `type` := "text/javascript"),
+      script(src := frontendApp, `type` := "text/javascript")
     ),
-    body()
+    body(
+      script(
+        """
+          |ve.chucho.codereview.CodeReviewApp().main()
+        """.stripMargin)
+    )
   ).toString
 
 }

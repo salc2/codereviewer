@@ -9,10 +9,7 @@ import scala.io.StdIn
 /**
   * Created by chucho on 9/22/16.
   */
-object CodeReviewApp extends App{
-  implicit val system = ActorSystem("codereview-system")
-  implicit val materializer = ActorMaterializer()
-  implicit val executionContext = system.dispatcher
+object CodeReviewServer extends App{
 
     val bindingFuture = Http().bindAndHandle(Router.route, "localhost", 8080)
     println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
