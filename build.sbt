@@ -13,7 +13,9 @@ lazy val foo = crossProject.in(file(".")).
   settings(
     name := "foo",
     version := "0.1-SNAPSHOT",
-     libraryDependencies += "com.lihaoyi" %%% "scalatags" % "0.6.0"
+     libraryDependencies ++= Seq(
+       "com.lihaoyi" %%% "scalatags" % "0.6.0",
+       "com.github.benhutchison" %%% "prickle" % "1.1.11")
   ).
   jvmSettings(
     libraryDependencies ++= Seq(

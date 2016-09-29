@@ -1,8 +1,7 @@
-package ve.chucho.codereview
+package ve.chucho.codereview.server
 
-import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.stream.ActorMaterializer
+import ve.chucho.codereview._
 
 import scala.io.StdIn
 
