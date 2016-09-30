@@ -38,7 +38,6 @@ object CodeReviewApp extends JSApp {
         case _ => ()
       }
     })).runWith(wsSource)
-    flow ! InitApp
   }
 
   def render(view:View):Unit = {

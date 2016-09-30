@@ -1,10 +1,10 @@
 package ve.chucho.codereview.client
 
-import akka.actor.{ActorLogging}
+import akka.actor.ActorLogging
 import akka.stream.actor.ActorPublisher
 import akka.stream.actor.ActorPublisherMessage.{Cancel, Request}
 import org.scalajs.dom.CloseEvent
-import org.scalajs.dom.raw.{MessageEvent, WebSocket}
+import org.scalajs.dom.raw.{Event, MessageEvent, WebSocket}
 import prickle._
 
 import scala.annotation.tailrec
@@ -20,6 +20,10 @@ class WebSocketPublisher extends ActorPublisher[AppMessage] with ActorLogging{
 
   val ws = new WebSocket("ws://localhost:8080/ws")
 
+  ws.onopen = (_:Event) => {
+    self ! InitApp
+  }
+
   ws.onmessage = (msg:MessageEvent) => {
     Unpickle[AppMessage]
       .fromString(msg.data.toString) match {
@@ -34,9 +38,6 @@ class WebSocketPublisher extends ActorPublisher[AppMessage] with ActorLogging{
       case Failure(e) =>
     }
   }
-  ws.onclose = (co:CloseEvent) => {
-    context.parent ! new NullPointerException
-  }
 
   val MaxBufferSize = 100
   var buf = Vector.empty[AppMessage]
@@ -44,7 +45,7 @@ class WebSocketPublisher extends ActorPublisher[AppMessage] with ActorLogging{
   override def receive: Receive = {
     case Request(_) => deliverBuf()
     case Cancel => context.stop(self)
-    case m:AppMessage => println("receive: "+m);ws.send(Pickle.intoString(m))
+    case m:AppMessage => ws.send(Pickle.intoString(m))
   }
 
 
