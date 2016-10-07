@@ -24,7 +24,7 @@ object CodeReviewApp extends JSApp {
       actorPublisher[AppMessage](Props(classOf[WebSocketPublisher]))
       .scan[Model](Dashboard(Nil))( (model,msg) => msg match {
         case cmmt:HGCommit => model match {
-          case Dashboard(commits) => Dashboard(cmmt +: commits)
+          case Dashboard(commits) => Dashboard(commits :+ cmmt  )
           case _ => model
         }
         case diff:HGDiff => Diff(diff)

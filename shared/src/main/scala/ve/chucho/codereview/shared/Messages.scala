@@ -11,11 +11,10 @@ object Messages {
     .concreteType[InitApp.type].concreteType[EmptyApp.type]
   sealed trait AppMessage
   case class HGCommit(
-                       changeset: String,
-                       parent: List[String],
-                       user: String,
-                       date: String,
-                       description: String
+                       node: String,
+                       desc: String,
+                       author: String,
+                       date: String
                      ) extends AppMessage
   case class HGLog(limit: Int) extends AppMessage
   case class HGDiff(chageset:String,diffText:String) extends AppMessage

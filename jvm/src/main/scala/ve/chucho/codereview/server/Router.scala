@@ -51,7 +51,7 @@ object Router {
       .fromString(msg) match {
       case Success(msg) =>
         msg.asInstanceOf[AppMessage] match {
-          case InitApp => cmdCommitLogs.map(cm => TextMessage(Pickle.intoString(cm))).toList
+          case InitApp => cmdCommitLogs.map( (cm:AppMessage) => {println(">>>"+cm);TextMessage(Pickle.intoString(cm))}).toList
           case _ => Nil
         }
       case Failure(e) => Nil
