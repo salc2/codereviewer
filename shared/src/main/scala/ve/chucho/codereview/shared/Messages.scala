@@ -1,5 +1,7 @@
 package ve.chucho.codereview.shared
 
+import java.util.Date
+
 import prickle.{CompositePickler, PicklerPair}
 
 /**
@@ -14,7 +16,7 @@ object Messages {
                        node: String,
                        desc: String,
                        author: String,
-                       date: String
+                       date: Date
                      ) extends AppMessage
   case class HGLog(limit: Int) extends AppMessage
   case class HGDiff(chageset:String,diffText:String) extends AppMessage

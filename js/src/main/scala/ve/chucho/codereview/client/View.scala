@@ -12,7 +12,7 @@ trait View{
 case class DashboardView(model:Dashboard) extends View {
   override def render: String = {
     ul(
-      for(c <- model.commits) yield li(span(c.node),span(c.author))
+      for(c <- model.commits) yield li( a(href :=s"#${c.node}",span(c.node.substring(0,5))),p(c.desc),p(s"${c.author} at ${c.date}"))
     ).toString()
   }
 }
