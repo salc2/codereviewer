@@ -25,12 +25,11 @@ class WebSocketPublisher extends ActorPublisher[AppMessage] with ActorLogging{
   }
 
   ws.onmessage = (msg:MessageEvent) => {
-    println(msg.data)
     Unpickle[AppMessage]
       .fromString(msg.data.toString) match {
       case Success(m) =>{
         val hgms = m.asInstanceOf[AppMessage]
-        
+
         if (buf.isEmpty && totalDemand > 0)
           onNext( hgms )
         else {
