@@ -10,7 +10,9 @@ import akka.stream.scaladsl._
 import org.scalajs.dom._
 import ve.chucho.codereview.shared.Messages.{AppMessage, _}
 
+import scala.scalajs.js
 import scala.scalajs.js.JSApp
+import scala.scalajs.js.annotation.JSName
 import scala.util.{Failure, Success, Try}
 import scalatags.Text.all._
 
@@ -41,9 +43,16 @@ case class DashboardView(model:Dashboard) extends View {
 }
 
 case class DiffView(model:Diff) extends View{
-  override def render: String = {
-    div(h3(model.diff.chageset),p(model.diff.diffText)).toString()
-  }
+  override def render: String =
+    /*div(h3(model.diff.chageset)
+    ).toString*/
+    Diff2Html.getPrettyHtml(model.diff.diffText,
+      new js.Object{
+        val inputFormat = "diff"
+        val outputFormat = "line-by-line"
+        val showFiles = true
+        val matching = "lines"
+      })
 }
 
 sealed trait Model
@@ -85,4 +94,9 @@ object CodeReviewApp extends JSApp {
   def render(view:View):Unit = {
     document.getElementById("app").innerHTML = view.render
   }
+}
+
+@js.native
+object Diff2Html extends js.Object{
+  def getPrettyHtml(input: String, configuration: js.Object): String = js.native
 }

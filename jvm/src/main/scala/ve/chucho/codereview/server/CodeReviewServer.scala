@@ -66,7 +66,7 @@ object Router {
               }
           } ~
           path("app" / "codereview.js") {
-              getFromFile(new File("js/target/scala-2.11/foo-fastopt.js").getAbsolutePath)
+              getFromFile(new File("js/target/scala-2.11/foo-opt.js").getAbsolutePath)
           } ~
           path("ws") {
               handleWebSocketMessages(greeter)
@@ -94,13 +94,13 @@ object MercurialCommands {
       .atZone(ZoneId.of("GMT-3"))
       .format(formatter)
 
-    def cmdCommitLogs:Stream[HGCommit] = Process(Seq("hg", "--cwd", s"$workingPath","log", "-b", "default", "--template", "{node} ;; {desc} ;; {author} ;; {date}\n"))
+    def cmdCommitLogs:Stream[HGCommit] = Process(Seq("hg", "--cwd", s"$workingPath","log", "-b", "default", "--template", "{node} ;; {desc|urlescape} ;; {author|person} ;; {date|rfc822date}\n\n"))
       .lineStream.filter(!_.isEmpty).map( l => l.split(";;").toList).map{
-        case node :: desc :: author :: date :: Nil => Some(HGCommit(node,desc,author,parseDate(date)))
-        case x => None
+        case node :: desc :: author :: date :: Nil => Some(HGCommit(node,java.net.URLDecoder.decode(desc, "UTF-8"),author,date))
+        case x =>println(x); None
     }.filter(_.isDefined).flatten
 
-    def cmdDiffByRevision(changeSet: String):AppMessage = HGDiff(changeSet,Process(Seq("hg", "--cwd", s"$workingPath","diff","-p","-r",changeSet)).lineStream.mkString)
+    def cmdDiffByRevision(changeSet: String):AppMessage = HGDiff(changeSet,Process(Seq("hg", "--cwd", s"$workingPath","diff","-c",changeSet)).lineStream.mkString("\n"))
 
     def parseDate(stringDate:String):Date = {
         val timestamp = stringDate.toDouble

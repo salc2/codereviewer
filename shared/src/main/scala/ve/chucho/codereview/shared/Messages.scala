@@ -16,7 +16,7 @@ object Messages {
                        node: String,
                        desc: String,
                        author: String,
-                       date: Date
+                       date: String
                      ) extends AppMessage
   case class HGLog(limit: Int) extends AppMessage
   case class HGDiff(chageset:String,diffText:String) extends AppMessage
